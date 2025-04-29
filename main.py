@@ -5,12 +5,15 @@
 # ///
 
 import sys, asyncio
+import os
 if sys.platform == "emscripten":
     import asyncio
     import platform
     platform.window.canvas.style.imageRendering = "pixelated"
+    ASSET_PATH = "assets"
+else:
+    ASSET_PATH = os.path.join(os.path.dirname(__file__), "assets")
 import pygame
-import os
 import time
 import random
 pygame.font.init()
@@ -22,23 +25,23 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Space Shooter")
 
 # Load images
-RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png"))
-GREEN_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png"))
-BLUE_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png"))
+RED_SPACE_SHIP = pygame.image.load(os.path.join(ASSET_PATH, "pixel_ship_red_small.png"))
+GREEN_SPACE_SHIP = pygame.image.load(os.path.join(ASSET_PATH, "pixel_ship_green_small.png"))
+BLUE_SPACE_SHIP = pygame.image.load(os.path.join(ASSET_PATH, "pixel_ship_blue_small.png"))
 
 # Player ship
-YELLOW_SPACE_SHIP = pygame.transform.scale(pygame.image.load(os.path.join("assets", "pixel_ship_yellow.png")), (50, 50))
+YELLOW_SPACE_SHIP = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_PATH, "pixel_ship_yellow.png")), (50, 50))
 
 # Lasers
 LASER_W, LASER_H = 60, 75
-RED_LASER = pygame.transform.scale(pygame.image.load(os.path.join("assets", "pixel_laser_red.png")), (LASER_W, LASER_H))
-GREEN_LASER = pygame.transform.scale(pygame.image.load(os.path.join("assets", "pixel_laser_green.png")), (LASER_W, LASER_H))
-BLUE_LASER = pygame.transform.scale(pygame.image.load(os.path.join("assets", "pixel_laser_blue.png")), (LASER_W, LASER_H))
-YELLOW_LASER = pygame.transform.scale(pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png")), (LASER_W, LASER_H))
+RED_LASER = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_PATH, "pixel_laser_red.png")), (LASER_W, LASER_H))
+GREEN_LASER = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_PATH, "pixel_laser_green.png")), (LASER_W, LASER_H))
+BLUE_LASER = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_PATH, "pixel_laser_blue.png")), (LASER_W, LASER_H))
+YELLOW_LASER = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_PATH, "pixel_laser_yellow.png")), (LASER_W, LASER_H))
 
 
 # Background
-BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+BG = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_PATH, "background-black.png")), (WIDTH, HEIGHT))
 
 class Laser:
     def __init__(self, x, y, img):
@@ -171,7 +174,7 @@ async def main():
     FPS = 60
     level = 1
     lives = 5
-    main_font = pygame.font.SysFont("impact", 20)
+    main_font = pygame.font.SysFont("impact", 25)
     lost_font = pygame.font.SysFont("impact", 50)
 
 
@@ -180,7 +183,7 @@ async def main():
     enemy_vel = 1
 
     player_vel = 5
-    laser_vel = 5
+    laser_vel = 6
 
     player = Player(300, 400)
 
