@@ -64,7 +64,7 @@ class Laser:
 
 
 class Ship:
-    COOLDOWWN = 30
+    COOLDOWWN = 20
 
     def __init__(self, x, y, health=100):
         self.x = x
@@ -172,14 +172,19 @@ def collide(obj1, obj2):
 async def main():
     run = True
     FPS = 60
-    level = 1
+    level = 0
     lives = 5
+    max_level = 5
+    victory = False
+
     main_font = pygame.font.SysFont("impact", 25)
     lost_font = pygame.font.SysFont("impact", 50)
+    victory_font = pygame.font.SysFont("impact", 60)
+    
 
 
     enemies = []
-    wave_length = 5
+    wave_length = 0
     enemy_vel = 1
 
     player_vel = 5
@@ -190,6 +195,8 @@ async def main():
     clock = pygame.time.Clock()
 
     lost = False
+    victory = False
+    victory_count = 0
     lost_count = 0
 
     def redraw_window():
@@ -209,7 +216,10 @@ async def main():
         if lost:
             lost_label = lost_font.render("You Lost !!", 1, (255, 255, 255))
             WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 250))
-        
+        elif victory:
+            victory_label = victory_font.render("Victory !!", 1, (255, 255, 255))
+            WIN.blit(victory_label, (WIDTH/2 - victory_label.get_width()/2, 250))
+
         pygame.display.update()
 
 
@@ -226,13 +236,22 @@ async def main():
                 run = False
             else:
                 continue
+        if victory:
+            victory_count += 1
+            if victory_count > FPS * 3:
+                run = False
+            continue
 
         if len(enemies) == 0:
-            level += 1
-            wave_length += 5
-            for i in range(wave_length):
-                enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"]))
-                enemies.append(enemy)
+            if level >= max_level:
+                victory = True
+                lost = False
+            else:
+                level += 1
+                wave_length += 5
+                for i in range(wave_length):
+                    enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"]))
+                    enemies.append(enemy)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
